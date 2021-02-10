@@ -70,6 +70,13 @@ data class Matrix4(
         (m30 * rhs.m03) + (m31 * rhs.m13) + (m32 * rhs.m23) + (m33 * rhs.m33)
     )
 
+    operator fun times(v: Vector3): Vector3 {
+        val x = v.x * m00 + v.y * m01 + v.z * m02
+        val y = v.x * m10 + v.y * m11 + v.z * m12
+        val z = v.x * m20 + v.y * m21 + v.z * m22
+        return Vector3(x, y, z)
+    }
+
     fun toArray(dst: FloatArray = FloatArray(16), offset: Int = 0): FloatArray {
         dst[offset + 0x0] = m00; dst[offset + 0x1] = m10; dst[offset + 0x2] = m20; dst[offset + 0x3] = m30
         dst[offset + 0x4] = m01; dst[offset + 0x5] = m11; dst[offset + 0x6] = m21; dst[offset + 0x7] = m31

@@ -21,10 +21,10 @@ class SceneGraphDemo(gl: WebGL2RenderingContext) {
 
     suspend fun run() {
         device.initialise()
-        device.moveLightTo(Vector3(0F, 100F, 0F))
+        device.moveLightTo(Vector3(0F, 10F, 30F))
 
         camera.lookAt(0F, 0F, 0F)
-        camera.moveTo(0F, 0.5F, 2.0F)
+        camera.moveTo(0.5F, 1.0F, 5.0F)
         controller.sync()
 
         window.addEventListener("mousedown", { controller.mouseDown(it as MouseEvent) })
@@ -33,34 +33,58 @@ class SceneGraphDemo(gl: WebGL2RenderingContext) {
         window.addEventListener("keydown", { controller.keyDown(it as KeyboardEvent) })
         window.addEventListener("keyup", { controller.keyUp(it as KeyboardEvent) })
 
+        createScene()
+
+        window.requestAnimationFrame { loop(it) }
+    }
+
+    private suspend fun createScene() {
         val blueMaterial = Material("Blue")
         blueMaterial.diffuseColor = Color.create(0xFF)
+
+        val redMaterial = Material("Red")
+        redMaterial.diffuseColor = Color.create(0xFF0000)
 
         val greenMaterial = Material("Green")
         greenMaterial.diffuseColor = Color.create(0xFF00)
 
         val blueCube = Primitives.createCube(0.5F, blueMaterial)
-        val greenCube = Primitives.createCube(0.25F, greenMaterial)
+        val redSphere = Primitives.createSphere(0.5F, 5, 16, redMaterial)
         val teapot = Wavefront.read("models", "teapot.obj")
 
         scene.root.add(
             BranchNode(Matrix4.createTranslation(Vector3(-0.5F, 0.2F, -1F))).add(
-                AxisRotationNode(Vector3.UNIT_Y, 0.005F).add(LeafNode(teapot))
+                AxisRotationNode(Vector3.UNIT_Y, 0.005F).add(
+                    LeafNode(teapot)
+                )
             )
         )
 
         scene.root.add(
-            BranchNode(Matrix4.createTranslation(Vector3(0.75F, -0.2F, -0.5F))).add(
-                AxisRotationNode(Vector3.UNIT_X, 0.005F).add(LeafNode(teapot))
+            AxisRotationNode(Vector3.UNIT_X, 0.005F).add(
+                BranchNode(Matrix4.createTranslation(Vector3(0.75F, 1.2F, 0.5F))).add(
+                    LeafNode(teapot)
+                )
             )
         )
 
-        scene.root.add(AxisRotationNode(Vector3.UNIT_X, 0.005F).add(LeafNode(blueCube)))
-        window.requestAnimationFrame { loop(it) }
+        scene.root.add(
+            AxisRotationNode(Vector3.UNIT_X, 0.005F).add(
+                LeafNode(blueCube)
+            )
+        )
+
+        scene.root.add(
+            AxisRotationNode(Vector3.UNIT_Y, 0.001F).add(
+                BranchNode(Matrix4.createTranslation(Vector3(-2.5F, 1.2F, 0.5F))).add(
+                    LeafNode(redSphere)
+                )
+            )
+        )
     }
 
     private fun loop(timestamp: Double) {
-        controller.update(timestamp, 0.000001)
+        controller.update(timestamp, 0.00001)
 
         scene.update(timestamp)
         scene.render(camera, device)

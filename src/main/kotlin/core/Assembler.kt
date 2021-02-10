@@ -29,7 +29,7 @@ class Assembler {
     }
 
     fun addNormal(x: Float, y: Float, z: Float) {
-        normals.add(Vector3(x, y, z))
+        normals.add(Vector3.normalize(Vector3(x, y, z)))
     }
 
     fun addTextureCoordinate(u: Float, v: Float) {

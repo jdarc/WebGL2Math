@@ -5,8 +5,8 @@ import math.Matrix4
 
 abstract class Node(transform: Matrix4 = Matrix4.IDENTITY) {
     private var parent: BranchNode? = null
+    protected var worldTransform = Matrix4.IDENTITY
     var localTransform = transform
-    var worldTransform = Matrix4.IDENTITY
 
     fun isParent(node: Node) = node == parent
 
@@ -25,7 +25,7 @@ abstract class Node(transform: Matrix4 = Matrix4.IDENTITY) {
     }
 
     open fun updateTransform() {
-        worldTransform = (parent?.worldTransform ?: Matrix4.IDENTITY) * localTransform
+        worldTransform = localTransform * (parent?.worldTransform ?: Matrix4.IDENTITY)
     }
 
     open fun update(seconds: Double) = Unit

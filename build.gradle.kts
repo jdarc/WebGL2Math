@@ -13,15 +13,11 @@ dependencies {
 }
 
 kotlin {
-    js(IR) {
+    js(LEGACY) {
         browser {
             binaries.executable()
-            webpackTask {
-                cssSupport.enabled = true
-            }
-            runTask {
-                cssSupport.enabled = true
-            }
+            webpackTask { cssSupport.enabled = true }
+            runTask { cssSupport.enabled = true }
             testTask {
                 useKarma {
                     useChromeHeadless()

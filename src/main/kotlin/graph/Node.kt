@@ -25,7 +25,7 @@ abstract class Node(transform: Matrix4 = Matrix4.IDENTITY) {
     }
 
     open fun updateTransform() {
-        worldTransform = localTransform * (parent?.worldTransform ?: Matrix4.IDENTITY)
+        worldTransform = (parent?.worldTransform ?: Matrix4.IDENTITY) * localTransform
     }
 
     open fun update(seconds: Double) = Unit

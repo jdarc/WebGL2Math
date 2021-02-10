@@ -7,7 +7,7 @@ import math.Matrix4
 import math.Scalar
 import math.Vector3
 
-object Primitives {
+object PrimitiveFactory {
 
     fun createCube(size: Float, material: Material): Model {
         val assembler = Assembler()

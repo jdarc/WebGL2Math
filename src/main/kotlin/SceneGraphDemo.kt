@@ -18,6 +18,7 @@ class SceneGraphDemo(gl: WebGL2RenderingContext) {
     private val camera = Camera()
     private val controller = CameraController(camera)
     private var scene = Scene()
+    private var lastTimeStamp = 0.0
 
     suspend fun run() {
         device.initialise()
@@ -84,11 +85,13 @@ class SceneGraphDemo(gl: WebGL2RenderingContext) {
     }
 
     private fun loop(timestamp: Double) {
-        controller.update(timestamp, 0.00001)
+        val delta = timestamp - lastTimeStamp
+        controller.update(delta, 0.01)
 
-        scene.update(timestamp)
+        scene.update(delta)
         scene.render(camera, device)
 
+        lastTimeStamp = timestamp
         window.requestAnimationFrame { loop(it) }
     }
 }

@@ -16,25 +16,25 @@ class Device(val gl: WebGL2RenderingContext) {
     var material = Material.DEFAULT
         set(value) {
             field = value
-            activeProgram.material(value)
+            activeProgram.material = value
         }
 
     var transform = Matrix4.IDENTITY
         set(value) {
             field = value
-            activeProgram.setWorldMatrix(field)
+            activeProgram.transform = field
         }
 
     var view = Matrix4.IDENTITY
         set(value) {
             field = value
-            activeProgram.setViewMatrix(field)
+            activeProgram.view = field
         }
 
     var projection = Matrix4.IDENTITY
         set(value) {
             field = value
-            activeProgram.setProjectionMatrix(field)
+            activeProgram.projection = field
         }
 
     suspend fun initialise() {
@@ -42,7 +42,7 @@ class Device(val gl: WebGL2RenderingContext) {
         val fragmentSrc = window.fetch("shaders/fragment.glsl").await().text().await()
         activeProgram = Program(gl, vertexSrc, fragmentSrc)
         activeProgram.use()
-        activeProgram.ambientIntensity(0.2F)
+        activeProgram.ambientIntensity = 0.2F
         gl.enable(gl.DEPTH_TEST)
         gl.enable(gl.CULL_FACE)
     }
@@ -60,7 +60,7 @@ class Device(val gl: WebGL2RenderingContext) {
     }
 
     fun moveLightTo(position: Vector3) {
-        activeProgram.lightPosition(position.x, position.y, position.x)
+        activeProgram.lightPosition = position
     }
 
     fun clear(color: Color) {
@@ -68,8 +68,8 @@ class Device(val gl: WebGL2RenderingContext) {
         gl.clear(gl.COLOR_BUFFER_BIT or gl.DEPTH_BUFFER_BIT)
     }
 
-    fun draw(data: FloatArray, total: Int) {
+    fun draw(data: FloatArray, count: Int) {
         activeProgram.bindVertexBuffer(buffers.getOrPut(data, { Glu.createVertexBuffer(gl, data.pack()) }))
-        gl.drawArrays(gl.TRIANGLES, 0, total)
+        gl.drawArrays(gl.TRIANGLES, 0, count)
     }
 }

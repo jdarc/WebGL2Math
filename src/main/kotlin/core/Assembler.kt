@@ -13,7 +13,7 @@ class Assembler {
     private val normals = mutableListOf<Vector3>()
     private val texCoord = mutableListOf<Tuple2>()
     private val faces = mutableListOf<Face>()
-    private val materials = mutableMapOf<String, Material>()
+    private val materials = mutableMapOf(Pair("", Material.DEFAULT))
     private var materialName = ""
 
     fun addMaterial(material: Material) {
@@ -56,10 +56,8 @@ class Assembler {
         return Model(groups)
     }
 
-    private fun pack(face: Face, index: Int): FloatArray {
-        val v = vertices[face.v[index]]
-        val vn = normals[face.vn[index]]
-        val vt = texCoord[face.vt[index]]
-        return floatArrayOf(v.x, v.y, v.z, vn.x, vn.y, vn.z, vt.x, vt.y)
-    }
+    private fun pack(face: Face, index: Int) =
+        vertices[face.v[index]].toArray() +
+        normals[face.vn[index]].toArray() +
+        texCoord[face.vt[index]].toArray()
 }

@@ -7,7 +7,7 @@ import core.Device
 @Suppress("MemberVisibilityCanBePrivate")
 class Scene {
 
-    val root = BranchNode()
+    val root = GroupNode()
 
     var background = Color.BLACK
 
@@ -25,9 +25,6 @@ class Scene {
         device.view = camera.view
         device.projection = camera.projection
         device.clear(background)
-        root.traverseDown {
-            it.render(device)
-            true
-        }
+        root.traverseDown { it.render(device) }
     }
 }

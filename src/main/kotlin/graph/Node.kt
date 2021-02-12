@@ -3,14 +3,16 @@ package graph
 import core.Device
 import math.Matrix4
 
+@Suppress("MemberVisibilityCanBePrivate")
 abstract class Node(transform: Matrix4 = Matrix4.IDENTITY) {
-    private var parent: BranchNode? = null
+    private var parent: GroupNode? = null
     protected var worldTransform = Matrix4.IDENTITY
     var localTransform = transform
 
-    fun isParent(node: Node) = node == parent
+    fun isParent(node: GroupNode?) = node == parent
 
-    fun setParent(node: BranchNode?) {
+    fun setParent(node: GroupNode?) {
+        if (isParent(node)) return
         parent?.remove(this)
         parent = node
         parent?.add(this)
@@ -28,7 +30,7 @@ abstract class Node(transform: Matrix4 = Matrix4.IDENTITY) {
         worldTransform = (parent?.worldTransform ?: Matrix4.IDENTITY) * localTransform
     }
 
-    open fun update(seconds: Double) = Unit
+    open fun update(seconds: Double) = true
 
-    open fun render(device: Device) = Unit
+    open fun render(device: Device) = true
 }

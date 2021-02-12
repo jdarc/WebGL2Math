@@ -1,18 +1,15 @@
 package utils
 
 import core.Assembler
-import core.Material
-import core.Model
+import core.Mesh
 import math.Matrix4
 import math.Scalar
 import math.Vector3
 
 object PrimitiveFactory {
 
-    fun createCube(size: Float, material: Material): Model {
+    fun createCube(size: Float): Mesh {
         val assembler = Assembler()
-        assembler.addMaterial(material)
-        assembler.useMaterial(material.name)
 
         val halfSize = size / 2F
 
@@ -50,13 +47,11 @@ object PrimitiveFactory {
         assembler.addFace(intArrayOf(3, 2, 7), intArrayOf(5, 5, 5), intArrayOf(0, 1, 2))
         assembler.addFace(intArrayOf(7, 6, 3), intArrayOf(5, 5, 5), intArrayOf(2, 3, 0))
 
-        return assembler.compile()
+        return assembler.compile().meshes[0]
     }
 
-    fun createSphere(radius: Float, stacks: Int, slices: Int, material: Material): Model {
+    fun createSphere(radius: Float, stacks: Int, slices: Int): Mesh {
         val assembler = Assembler()
-        assembler.addMaterial(material)
-        assembler.useMaterial(material.name)
 
         val stackAngle = Scalar.PI / stacks
         val sliceAngle = Scalar.PI / slices * 2.0F
@@ -86,6 +81,6 @@ object PrimitiveFactory {
             }
         }
 
-        return assembler.compile()
+        return assembler.compile().meshes[0]
     }
 }

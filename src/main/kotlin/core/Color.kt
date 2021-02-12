@@ -7,9 +7,9 @@ data class Color internal constructor(val red: Float, val grn: Float, val blu: F
         val WHITE = create(0xFFFFFF)
 
         fun create(rgb: Int): Color {
-            val r = 255 and rgb.shr(16)
-            val g = 255 and rgb.shr(8)
-            val b = 255 and rgb
+            val r = 0xFF and rgb.shr(16)
+            val g = 0xFF and rgb.shr(8)
+            val b = 0xFF and rgb
             return create(r / 255F, g / 255F, b / 255F)
         }
 

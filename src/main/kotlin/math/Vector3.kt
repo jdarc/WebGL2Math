@@ -2,7 +2,10 @@ package math
 
 import kotlin.math.sqrt
 
+@Suppress("unused")
 data class Vector3(val x: Float, val y: Float, val z: Float) {
+
+    constructor(s: Float) : this(s, s, s)
 
     val length get() = sqrt(dot(this, this))
 
@@ -16,8 +19,14 @@ data class Vector3(val x: Float, val y: Float, val z: Float) {
 
     operator fun div(s: Float) = Vector3(x / s, y / s, z / s)
 
+    fun toArray(dst: FloatArray = FloatArray(3), offset: Int = 0): FloatArray {
+        dst[offset + 0x0] = x; dst[offset + 0x1] = y; dst[offset + 0x2] = z
+        return dst
+    }
+
     companion object {
 
+        val ONE = Vector3(1F, 1F, 1F)
         val ZERO = Vector3(0F, 0F, 0F)
 
         val UNIT_X = Vector3(1F, 0F, 0F)
@@ -37,8 +46,8 @@ data class Vector3(val x: Float, val y: Float, val z: Float) {
 
         fun equals(lhs: Vector3, rhs: Vector3, epsilon: Float = Scalar.EPSILON) =
             Scalar.equals(lhs.x, rhs.x, epsilon) &&
-                    Scalar.equals(lhs.y, rhs.y, epsilon) &&
-                    Scalar.equals(lhs.z, rhs.z, epsilon)
+            Scalar.equals(lhs.y, rhs.y, epsilon) &&
+            Scalar.equals(lhs.z, rhs.z, epsilon)
 
         fun clamp(v: Vector3, min: Float, max: Float): Vector3 {
             val x = v.x.coerceIn(min, max)

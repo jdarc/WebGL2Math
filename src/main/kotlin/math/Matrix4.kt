@@ -2,6 +2,7 @@ package math
 
 import kotlin.math.*
 
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 data class Matrix4(
     val m00: Float, val m10: Float, val m20: Float, val m30: Float,
     val m01: Float, val m11: Float, val m21: Float, val m31: Float,
@@ -90,13 +91,13 @@ data class Matrix4(
 
         fun equals(lhs: Matrix4, rhs: Matrix4, epsilon: Float = Scalar.EPSILON) =
             Scalar.equals(lhs.m00, rhs.m00, epsilon) && Scalar.equals(lhs.m10, rhs.m10, epsilon) &&
-                    Scalar.equals(lhs.m20, rhs.m20, epsilon) && Scalar.equals(lhs.m30, rhs.m30, epsilon) &&
-                    Scalar.equals(lhs.m01, rhs.m01, epsilon) && Scalar.equals(lhs.m11, rhs.m11, epsilon) &&
-                    Scalar.equals(lhs.m21, rhs.m21, epsilon) && Scalar.equals(lhs.m31, rhs.m31, epsilon) &&
-                    Scalar.equals(lhs.m02, rhs.m02, epsilon) && Scalar.equals(lhs.m12, rhs.m12, epsilon) &&
-                    Scalar.equals(lhs.m22, rhs.m22, epsilon) && Scalar.equals(lhs.m32, rhs.m32, epsilon) &&
-                    Scalar.equals(lhs.m03, rhs.m03, epsilon) && Scalar.equals(lhs.m13, rhs.m13, epsilon) &&
-                    Scalar.equals(lhs.m23, rhs.m23, epsilon) && Scalar.equals(lhs.m33, rhs.m33, epsilon)
+            Scalar.equals(lhs.m20, rhs.m20, epsilon) && Scalar.equals(lhs.m30, rhs.m30, epsilon) &&
+            Scalar.equals(lhs.m01, rhs.m01, epsilon) && Scalar.equals(lhs.m11, rhs.m11, epsilon) &&
+            Scalar.equals(lhs.m21, rhs.m21, epsilon) && Scalar.equals(lhs.m31, rhs.m31, epsilon) &&
+            Scalar.equals(lhs.m02, rhs.m02, epsilon) && Scalar.equals(lhs.m12, rhs.m12, epsilon) &&
+            Scalar.equals(lhs.m22, rhs.m22, epsilon) && Scalar.equals(lhs.m32, rhs.m32, epsilon) &&
+            Scalar.equals(lhs.m03, rhs.m03, epsilon) && Scalar.equals(lhs.m13, rhs.m13, epsilon) &&
+            Scalar.equals(lhs.m23, rhs.m23, epsilon) && Scalar.equals(lhs.m33, rhs.m33, epsilon)
 
         fun transpose(mat: Matrix4) = Matrix4(
             mat.m00, mat.m01, mat.m02, mat.m03,
@@ -140,12 +141,17 @@ data class Matrix4(
             return Matrix4(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
         }
 
+        fun create(position: Vector3, rotation: Matrix4, scale: Vector3) =
+            createTranslation(position) * rotation * createScale(scale)
+
         fun createTranslation(vec: Vector3) = createTranslation(vec.x, vec.y, vec.z)
-        fun createTranslation(x: Float, y: Float, z: Float) = Matrix4(1F, 0F, 0F, 0F, 0F, 1F, 0F, 0F, 0F, 0F, 1F, 0F, x, y, z, 1F)
+        fun createTranslation(x: Float, y: Float, z: Float) =
+            Matrix4(1F, 0F, 0F, 0F, 0F, 1F, 0F, 0F, 0F, 0F, 1F, 0F, x, y, z, 1F)
 
         fun createScale(scale: Float) = createScale(scale, scale, scale)
         fun createScale(vec: Vector3) = createScale(vec.x, vec.y, vec.z)
-        fun createScale(x: Float, y: Float, z: Float) = Matrix4(x, 0F, 0F, 0F, 0F, y, 0F, 0F, 0F, 0F, z, 0F, 0F, 0F, 0F, 1F)
+        fun createScale(x: Float, y: Float, z: Float) =
+            Matrix4(x, 0F, 0F, 0F, 0F, y, 0F, 0F, 0F, 0F, z, 0F, 0F, 0F, 0F, 1F)
 
         fun createRotationX(radians: Float) = createFromAxisAngle(1F, 0F, 0F, radians)
         fun createRotationY(radians: Float) = createFromAxisAngle(0F, 1F, 0F, radians)
